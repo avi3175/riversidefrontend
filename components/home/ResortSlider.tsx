@@ -35,6 +35,11 @@ const slides = [
     title: 'Moonlit Riverside',
     description: 'Peaceful night vibes with moonlight reflecting on the water',
   },
+  {
+    image: 'https://images.unsplash.com/photo-1601726857660-a3b9fb0dadcb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Moonlit Riverside',
+    description: 'Peaceful night vibes with moonlight reflecting on the water',
+  },
 ];
 
 export default function ResortSlider() {
