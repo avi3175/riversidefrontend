@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
+import { bookingsAPI } from '@/lib/api/bookings';
 import { FaSpinner, FaCalendar, FaUsers, FaTrash, FaTicketAlt } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -41,30 +42,17 @@ export default function UserDashboard() {
   const fetchMyBookings = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      
-      const response = await fetch('http://localhost:5000/api/v1/bookings/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      
-      const data = await response.json();
+      const data = await bookingsAPI.getMyBookings();
       console.log('Bookings response:', data);
-      
-      // Handle different response formats
-      let bookingsData: Booking[] = [];
-      
-      if (data && Array.isArray(data)) {
-        bookingsData = data;
-      } else if (data && data.data && Array.isArray(data.data)) {
-        bookingsData = data.data;
-      } else if (data && data.bookings && Array.isArray(data.bookings)) {
-        bookingsData = data.bookings;
-      } else {
-        bookingsData = [];
-      }
-      
+
+      const bookingsData: Booking[] = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data?.bookings)
+        ? data.bookings
+        : [];
+
       setBookings(bookingsData);
     } catch (error: any) {
       console.error('Failed to fetch bookings:', error);
@@ -82,20 +70,7 @@ export default function UserDashboard() {
 
     setCancellingId(bookingId);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/v1/bookings/${bookingId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to cancel booking');
-      }
-      
+      await bookingsAPI.delete(bookingId);
       toast.success('Booking cancelled successfully');
       fetchMyBookings(); // Refresh the list
     } catch (error: any) {

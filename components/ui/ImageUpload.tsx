@@ -9,9 +9,12 @@ import { FaSpinner } from 'react-icons/fa';
 interface ImageUploadProps {
   onUpload: (imageUrl: string) => void;
   currentImage?: string;
+  multiple?: boolean;
+  images?: string[];
+  onRemove?: (index: number) => void;
 }
 
-export default function ImageUpload({ onUpload, currentImage }: ImageUploadProps) {
+export default function ImageUpload({ onUpload, currentImage, multiple, images, onRemove }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 

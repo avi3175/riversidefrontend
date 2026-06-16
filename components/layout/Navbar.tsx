@@ -27,6 +27,8 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/items', label: 'Packages' },
+    { href: '/menu', label: 'Menu' },
+    { href: '/services', label: 'Services' },
     { href: '/about', label: 'About' },
   ];
 
@@ -84,7 +86,7 @@ export default function Navbar() {
                     </div>
                     
                     {/* Dashboard link for all logged-in users */}
-                    {user.role === 'admin' ? (
+                    {user.role === 'admin' || user.role === 'manager' ? (
                       <Link
                         href="/admin/dashboard"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -102,8 +104,8 @@ export default function Navbar() {
                       </Link>
                     )}
                     
-                    {/* Admin only links */}
-                    {user.role === 'admin' && (
+                    {/* Admin/Manager only links */}
+                    {(user.role === 'admin' || user.role === 'manager') && (
                       <>
                         <Link
                           href="/admin/add"
@@ -118,6 +120,61 @@ export default function Navbar() {
                           onClick={() => setIsDropdownOpen(false)}
                         >
                           Manage Packages
+                        </Link>
+                        <Link
+                          href="/admin/menu-items"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Manage Menu
+                        </Link>
+                        <Link
+                          href="/admin/services"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Manage Services
+                        </Link>
+                        <Link
+                          href="/admin/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          View Orders
+                        </Link>
+                        <Link
+                          href="/admin/restaurant-bookings"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Restaurant Bookings
+                        </Link>
+                        <Link
+                          href="/admin/testimonials"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Testimonials
+                        </Link>
+                      </>
+                    )}
+                    
+                    {/* User-specific links */}
+                    {user.role === 'user' && (
+                      <>
+                        <Link
+                          href="/dashboard/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          My Orders
+                        </Link>
+                        <Link
+                          href="/dashboard/restaurant-bookings"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Restaurant Bookings
                         </Link>
                       </>
                     )}
@@ -194,7 +251,7 @@ export default function Navbar() {
                   </div>
                   
                   {/* Dashboard link for all logged-in users */}
-                  {user.role === 'admin' ? (
+                  {user.role === 'admin' || user.role === 'manager' ? (
                     <Link
                       href="/admin/dashboard"
                       className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
@@ -212,8 +269,8 @@ export default function Navbar() {
                     </Link>
                   )}
                   
-                  {/* Admin only links */}
-                  {user.role === 'admin' && (
+                  {/* Admin/Manager links */}
+                  {(user.role === 'admin' || user.role === 'manager') && (
                     <>
                       <Link
                         href="/admin/add"
@@ -228,6 +285,61 @@ export default function Navbar() {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Manage Packages
+                      </Link>
+                      <Link
+                        href="/admin/menu-items"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Manage Menu
+                      </Link>
+                      <Link
+                        href="/admin/services"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Manage Services
+                      </Link>
+                      <Link
+                        href="/admin/orders"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        View Orders
+                      </Link>
+                      <Link
+                        href="/admin/restaurant-bookings"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Restaurant Bookings
+                      </Link>
+                      <Link
+                        href="/admin/testimonials"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Testimonials
+                      </Link>
+                    </>
+                  )}
+                  
+                  {/* User-specific links */}
+                  {user.role === 'user' && (
+                    <>
+                      <Link
+                        href="/dashboard/orders"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        href="/dashboard/restaurant-bookings"
+                        className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Restaurant Bookings
                       </Link>
                     </>
                   )}

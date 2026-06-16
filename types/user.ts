@@ -2,7 +2,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'manager';
 }
 
 export interface AuthContextType {
@@ -14,8 +14,10 @@ export interface AuthContextType {
 }
 
 // Helper function to safely convert API role string to UserRole
-export const normalizeRole = (role: string): 'admin' | 'user' => {
+export const normalizeRole = (role: string): 'admin' | 'user' | 'manager' => {
   if (!role) return 'user';
   const lowerRole = role.toLowerCase();
-  return lowerRole === 'admin' ? 'admin' : 'user';
+  if (lowerRole === 'admin') return 'admin';
+  if (lowerRole === 'manager') return 'manager';
+  return 'user';
 };

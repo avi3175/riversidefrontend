@@ -120,23 +120,7 @@ const handleBooking = async (e: React.FormEvent) => {
   
   setIsBooking(true);
   try {
-    const token = localStorage.getItem('token');
-    
-    const response = await fetch('http://localhost:5000/api/v1/bookings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(bookingData)
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || data.error || 'Booking failed');
-    }
-    
+    await bookingsAPI.create(bookingData);
     toast.success('Booking created successfully!');
     setBooking({ date: '', guests: 1 });
   } catch (error: any) {

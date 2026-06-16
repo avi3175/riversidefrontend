@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
 import { packagesAPI, Package } from '@/lib/api/packages';
-import { bookingsAPI, Booking } from '@/lib/api/bookings';
+import { bookingsAPI } from '@/lib/api/bookings';
+import { usersAPI } from '@/lib/api/users';
 import { FaSpinner, FaCalendar, FaUsers, FaBox, FaMoneyBill, FaEye, FaTrash } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -17,6 +18,14 @@ interface User {
   role: string;
 }
 
+interface Booking {
+  id: number;
+  packageId: number;
+  userId: number;
+  date: string;
+  guests: number;
+}
+
 export default function AdminDashboard() {
   const { user } = useAuth();
   const router = useRouter();
@@ -26,7 +35,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
       router.push('/');
       return;
     }
@@ -38,16 +47,8 @@ export default function AdminDashboard() {
       setLoading(true);
       const [packagesRes, bookingsRes, usersRes] = await Promise.all([
         packagesAPI.getAll({ limit: 100 }),
-        fetch('http://localhost:5000/api/v1/bookings', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        }).then(res => res.json()),
-        fetch('http://localhost:5000/api/v1/users', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        }).then(res => res.json())
+        bookingsAPI.getAll({ limit: 100 }),
+        usersAPI.getAll({ limit: 100 })
       ]);
 
       setPackages(packagesRes.data);
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
     return sum + (pkg?.price || 0) * booking.guests;
   }, 0);
 
-  if (!user || user.role !== 'admin') {
+  if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
     return null;
   }
 
@@ -139,6 +140,18 @@ export default function AdminDashboard() {
             </Link>
             <Link href="/admin/manage">
               <Button variant="outline">Manage Packages</Button>
+            </Link>
+            <Link href="/admin/menu-items">
+              <Button variant="outline">Manage Menu</Button>
+            </Link>
+            <Link href="/admin/services">
+              <Button variant="outline">Manage Services</Button>
+            </Link>
+            <Link href="/admin/orders">
+              <Button variant="outline">View Orders</Button>
+            </Link>
+            <Link href="/admin/restaurant-bookings">
+              <Button variant="outline">Restaurant Bookings</Button>
             </Link>
           </div>
         </div>
